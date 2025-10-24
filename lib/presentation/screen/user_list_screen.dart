@@ -18,68 +18,106 @@ class UserListScreen extends StatelessWidget {
     return BlocProvider(
       create: (context) =>
           UserCubit(userRepository: getIt<UserRepository>())..getUsers(),
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Users'),
-          actions: [
-            IconButton(
-              icon: Icon(
-                theme.brightness == Brightness.dark
-                    ? Icons.wb_sunny
-                    : Icons.nightlight_round,
-              ),
-              onPressed: () {
-                context.read<ThemeCubit>().toggle();
-              },
-            ),
-          ],
-        ),
-        body: BlocBuilder<UserCubit, UserState>(
-          builder: (context, state) {
-            return switch (state) {
-              UserLoading() => const Center(
-                child: CircularProgressIndicator.adaptive(),
-              ),
-              UserData(users: final users) => RefreshIndicator(
-                onRefresh: () => context.read<UserCubit>().getUsers(),
-                child: ListView.builder(
-                  itemCount: users.length,
-                  itemBuilder: (context, index) {
-                    final user = users[index];
-                    return UserTile(
-                      user: user,
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => UserDetailScreen(user: user),
-                          ),
-                        );
-                      },
-                    );
+      child: Builder(
+        builder: (context) {
+          return Scaffold(
+            appBar: AppBar(
+              title: const Text('Users'),
+              actions: [
+                IconButton(
+                  icon: Icon(
+                    theme.brightness == Brightness.dark
+                        ? Icons.wb_sunny
+                        : Icons.nightlight_round,
+                  ),
+                  onPressed: () {
+                    context.read<ThemeCubit>().toggle();
                   },
                 ),
-              ),
-              UserError(message: final message) => Center(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: Text(
-                    message,
-                    style: theme.textTheme.bodyMedium?.copyWith(
-                      color: theme.colorScheme.error,
+              ],
+            ),
+            body: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: TextField(
+                    onTapOutside: (_) {
+                      FocusScope.of(context).unfocus();
+                    },
+                    decoration: InputDecoration(
+                      hintText: 'Search users...',
+                      prefixIcon: const Icon(Icons.search),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12.0),
+                      ),
                     ),
+                    onChanged: (query) {
+                      context.read<UserCubit>().filterUsers(query);
+                    },
                   ),
                 ),
-              ),
-              UserEmpty(message: final message) => Center(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: Text(message, style: theme.textTheme.bodyMedium),
+                Expanded(
+                  child: BlocBuilder<UserCubit, UserState>(
+                    builder: (context, state) {
+                      return switch (state) {
+                        UserLoading() => const Center(
+                          child: CircularProgressIndicator.adaptive(),
+                        ),
+                        UserData(users: final users) => RefreshIndicator(
+                          onRefresh: () => context.read<UserCubit>().getUsers(),
+                          child: ListView.builder(
+                            keyboardDismissBehavior:
+                                ScrollViewKeyboardDismissBehavior.onDrag,
+                            itemCount: users.length,
+                            itemBuilder: (context, index) {
+                              final user = users[index];
+                              return UserTile(
+                                user: user,
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          UserDetailScreen(user: user),
+                                    ),
+                                  );
+                                },
+                              );
+                            },
+                          ),
+                        ),
+                        UserError(message: final message) => Center(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 16.0,
+                            ),
+                            child: Text(
+                              message,
+                              style: theme.textTheme.bodyMedium?.copyWith(
+                                color: theme.colorScheme.error,
+                              ),
+                            ),
+                          ),
+                        ),
+                        UserEmpty(message: final message) => Center(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 16.0,
+                            ),
+                            child: Text(
+                              message,
+                              style: theme.textTheme.bodyMedium,
+                            ),
+                          ),
+                        ),
+                      };
+                    },
+                  ),
                 ),
-              ),
-            };
-          },
-        ),
+              ],
+            ),
+          );
+        },
       ),
     );
   }

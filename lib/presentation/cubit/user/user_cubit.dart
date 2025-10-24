@@ -30,4 +30,13 @@ class UserCubit extends Cubit<UserState> {
       emit(UserError(message: "Unexpected error occurred"));
     }
   }
+
+  void filterUsers(String query) {
+    if (state is! UserData) {
+      return;
+    }
+    final filterUsers = userRepository.filterUsers(query);
+
+    emit(UserData(users: filterUsers));
+  }
 }
