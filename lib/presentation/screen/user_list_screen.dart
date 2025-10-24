@@ -1,3 +1,4 @@
+import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:user_explorer/presentation/screen/user_detail_screen.dart';
@@ -52,7 +53,15 @@ class UserListScreen extends StatelessWidget {
                       ),
                     ),
                     onChanged: (query) {
-                      context.read<UserCubit>().filterUsers(query);
+                      EasyDebounce.debounce(
+                        'my-debouncer',
+                        Duration(
+                          milliseconds: 300,
+                        ), // <-- The debounce duration
+                        () {
+                          context.read<UserCubit>().filterUsers(query);
+                        },
+                      );
                     },
                   ),
                 ),

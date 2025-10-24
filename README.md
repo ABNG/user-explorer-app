@@ -11,7 +11,7 @@ The app emphasizes maintainability, modularity, and testability — following Fl
 ## Features
 
 - Fetch and display a list of users from a REST API.
-- **Filter users** in real-time by name.
+- **Filter users** in real-time with debouncing to optimize performance.
 - Navigate to a **User Detail Screen** with full information.
 - Supports both **Light** and **Dark** themes with a persistent toggle.
 - Graceful handling of **loading**, **error**, and **empty** states.
@@ -25,7 +25,7 @@ The app emphasizes maintainability, modularity, and testability — following Fl
 
 ### User List Screen
 Displays a scrollable list of users fetched from the API with:
-- A search bar to filter users by name.
+- A search bar to filter users, with debouncing to ensure a smooth user experience.
 - Pull-to-refresh functionality.
 - Loading and error indicators.
 - Smooth navigation to the detail screen.
