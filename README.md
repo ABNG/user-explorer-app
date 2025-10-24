@@ -38,6 +38,7 @@ Displays detailed information about the selected user:
 
 The project follows a **layer-first (Clean Architecture)** structure:
 
+```
 lib/
 ├── core/
 │ ├── di/ # Dependency Injection setup
@@ -54,7 +55,7 @@ lib/
 │ └── screen/ # UI Screens (List, Detail)
 │ └── widget/ # Reusable UI components
 └── main.dart # App entry point
-
+```
 ---
 
 ### Setup and Installation
@@ -69,8 +70,8 @@ lib/
 1.  **Clone the Repository**:
 
     ```bash
-    git clone <your-repository-url>
-    cd user_explorer
+    git clone https://github.com/ABNG/user-explorer-app.git
+    cd user-explorer-app
     ```
 
 2.  **Install Dependencies**:
