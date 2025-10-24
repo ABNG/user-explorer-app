@@ -37,6 +37,12 @@ Displays detailed information about the selected user:
 
 ---
 
+## Demo Video
+
+https://github.com/user-attachments/assets/bb2e711f-4d85-4c3e-82ac-4acf52f51455
+
+---
+
 ### Architecture
 
 The project follows a **layer-first (Clean Architecture)** structure:
