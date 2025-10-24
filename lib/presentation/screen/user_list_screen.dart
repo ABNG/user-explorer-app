@@ -4,6 +4,7 @@ import 'package:user_explorer/presentation/screen/user_detail_screen.dart';
 
 import '../../core/di/injection.dart';
 import '../../domain/repository/user_repository.dart';
+import '../cubit/theme/theme_cubit.dart';
 import '../cubit/user/user_cubit.dart';
 import '../widget/user_tile.dart';
 
@@ -12,11 +13,27 @@ class UserListScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return BlocProvider(
       create: (context) =>
           UserCubit(userRepository: getIt<UserRepository>())..getUsers(),
       child: Scaffold(
-        appBar: AppBar(title: const Text('Users')),
+        appBar: AppBar(
+          title: const Text('Users'),
+          actions: [
+            IconButton(
+              icon: Icon(
+                theme.brightness == Brightness.dark
+                    ? Icons.wb_sunny
+                    : Icons.nightlight_round,
+              ),
+              onPressed: () {
+                context.read<ThemeCubit>().toggle();
+              },
+            ),
+          ],
+        ),
         body: BlocBuilder<UserCubit, UserState>(
           builder: (context, state) {
             return switch (state) {
@@ -48,14 +65,16 @@ class UserListScreen extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: Text(
                     message,
-                    style: const TextStyle(color: Colors.red, fontSize: 16.0),
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      color: theme.colorScheme.error,
+                    ),
                   ),
                 ),
               ),
               UserEmpty(message: final message) => Center(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: Text(message, style: const TextStyle(fontSize: 16.0)),
+                  child: Text(message, style: theme.textTheme.bodyMedium),
                 ),
               ),
             };

@@ -12,6 +12,7 @@ The app emphasizes maintainability, modularity, and testability — following Fl
 
 - Fetch and display a list of users from a REST API.
 - Navigate to a **User Detail Screen** with full information.
+- Supports both **Light** and **Dark** themes with a persistent toggle.
 - Graceful handling of **loading**, **error**, and **empty** states.
 - Follows **Clean Architecture** principles.
 - Uses **Cubit (flutter_bloc)** for state management.
